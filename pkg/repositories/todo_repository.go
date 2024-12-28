@@ -4,12 +4,14 @@ import (
 	"todo-app/pkg/models"
 	"sync"
 	"sort"
+	"fmt"
 )
 
 type TodoRepository interface {
 	GetAllTodos() ([]model.Todo, error)
 	CreateTodo(todo *model.Todo) (*model.Todo, error)
 	DeleteTodo(id int) error
+	ToggleTodoComplete(id int) (*model.Todo, error)
 }
 
 // addDummyData is a helper function to add predefined To-Do items for testing
@@ -67,4 +69,22 @@ func (r *InMemoryRepository) DeleteTodo(id int) error {
 	defer r.mu.Unlock()
 	delete(r.todos, id)
 	return nil
+}
+
+// ToggleTodoComplete toggles the completion status of a To-Do by its ID
+func (r *InMemoryRepository) ToggleTodoComplete(id int) (*model.Todo, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	// Check if the todo exists
+	todo, exists := r.todos[id]
+	if !exists {
+		return nil, fmt.Errorf("Todo with ID %d not found", id)
+	}
+
+	// Toggle the 'Completed' status
+	todo.Completed = !todo.Completed
+	r.todos[id] = todo  // Update the todo in the map
+
+	return &todo, nil
 }

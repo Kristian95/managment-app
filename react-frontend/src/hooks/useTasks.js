@@ -4,6 +4,7 @@ import {
   fetchTasksFromApi,
   addTaskToApi,
   deleteTaskFromApi,
+  handleToggleCompleteApi
 } from '../api/taskApi';
 
 const useTasks = () => {
@@ -61,7 +62,21 @@ const useTasks = () => {
   };
 
   const completeTask = async (id) => {
-    console.log(id)
+    try {
+      const updatedTask = await handleToggleCompleteApi(id);
+
+      if (updatedTask) {
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === id ? { ...task, completed: updatedTask.completed } : task
+          )
+        );
+      } else {
+        console.error('Failed to complete task. No task returned.');
+      }
+    } catch (err) {
+      setError('Failed to complete task');
+    }
   };
 
 

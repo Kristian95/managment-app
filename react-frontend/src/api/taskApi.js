@@ -49,3 +49,24 @@ export const deleteTaskFromApi = async (id) => {
     return null;  // Return null if the task couldn't be deleted
   }
 };
+
+// Complete a task from the API
+export const handleToggleCompleteApi = async (taskId) => {
+  try {
+    const response = await fetch(`http://localhost:4000/todo/${taskId}/complete`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (response.ok) {
+      const updatedTask = await response.json();
+      return updatedTask;
+    } else {
+      console.error('Failed to update task');
+    }
+  } catch (error) {
+    console.error('Error completing task:', error);
+  }
+};

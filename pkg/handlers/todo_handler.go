@@ -71,3 +71,25 @@ func (h *TodoHandler) DeleteTodo(c *fiber.Ctx) error {
         "message": "Todo deleted successfully",
     })
 }
+
+// CompleteTodo handles PUT /todo
+func (h *TodoHandler) ToggleTodoComplete(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Invalid ID",
+		})
+	}
+
+	// Call service to toggle the completion status
+	todo, err := h.service.ToggleTodoComplete(intID)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Error",
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(todo)
+}

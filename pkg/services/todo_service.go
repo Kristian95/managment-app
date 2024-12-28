@@ -30,3 +30,8 @@ func (s *TodoService) CreateTodo(todo *model.Todo) (*model.Todo, error) {
 func (s *TodoService) DeleteTodo(id int) error {
 	return s.repo.DeleteTodo(id)
 }
+
+// ToggleTodoComplete complete toto
+func (s *TodoService) ToggleTodoComplete(id int) (*model.Todo, error) {
+    return s.repo.ToggleTodoComplete(id)
+}
