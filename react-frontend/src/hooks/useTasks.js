@@ -10,7 +10,6 @@ const useTasks = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [newTask, setNewTask] = useState('');
 
   // Fetch tasks when component mounts
   useEffect(() => {
@@ -32,20 +31,17 @@ const useTasks = () => {
   };
 
   // Add a new task
-  const addTask = async () => {  
-    console.log(newTask);
-    if (newTask.trim() === '') {
+  const addTask = async (data) => {  
+    if (!data.title || !data.description) {
+      console.error('Incorect data.');
       return;
     }
-
-    const task = { title: newTask };
   
     try {
-      const newTaskResponse = await addTaskToApi(task);
+      const newTaskResponse = await addTaskToApi(data);
   
       if (newTaskResponse) {
         setTasks((prevTasks) => [...prevTasks, newTaskResponse]);
-        setNewTask('')
       } else {
         console.error('Failed to add task. No task returned.');
       }
@@ -68,10 +64,6 @@ const useTasks = () => {
     console.log(id)
   };
 
-  const handleNewTaskChange = (e) => {
-    setNewTask(e.target.value);
-  };
-
 
   return {
     tasks,
@@ -80,8 +72,7 @@ const useTasks = () => {
     addTask,
     deleteTask,
     fetchTasks,
-    completeTask,
-    handleNewTaskChange
+    completeTask
   };
 };
 
