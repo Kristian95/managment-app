@@ -31,6 +31,24 @@ const useTasks = () => {
     }
   };
 
+  const handleEditTaskApi = async (data) => {
+    try {
+      const updatedTask = await handleEditTaskApi(data);
+
+      if (updatedTask) {
+        // setTasks((prevTasks) =>
+        //   prevTasks.map((task) =>
+        //     task.id === id ? { ...task, title: updatedTask.title, description: updatedTask.description } : task
+        //   )
+        // );
+      } else {
+        console.error('Failed to edit task. No task returned.');
+      }
+    } catch (err) {
+      setError('Failed to edit task');
+    }
+  }
+
   // Add a new task
   const addTask = async (data) => {  
     if (!data.title || !data.description) {

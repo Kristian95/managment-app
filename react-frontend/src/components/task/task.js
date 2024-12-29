@@ -6,7 +6,7 @@ import TaskForm from './taskForm';
 import DeleteModal from '../common/deleteComponent';
 
 function Tasks() {
-  const { tasks, addTask, deleteTask, completeTask } = useTasks();
+  const { tasks, addTask, deleteTask, completeTask, editTask } = useTasks();
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
@@ -75,7 +75,15 @@ function Tasks() {
                     {task.completed ? 'Undo' : 'Complete'}
                 </Button>
                 <Button
+                    variant="secondary"
+                    style={{ marginRight: '10px' }}
+                    onClick={() => editTask(task.id)}
+                >
+                    Edit
+                </Button>
+                <Button
                     variant="danger"
+                    style={{ marginRight: '10px' }}
                     onClick={() => handleShowDeleteModal(task.id)}
                 >
                     Delete

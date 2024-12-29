@@ -18,13 +18,13 @@ func main() {
 	}))
 
 	repo := repository.NewInMemoryRepository() // Using in-memory DB for simplicity
-	svc := service.NewTodoService(repo)
-	h := handler.NewTodoHandler(svc)
+	svc := service.NewTaskService(repo)
+	h := handler.NewTaskHandler(svc)
 
-	app.Get("/todos", h.GetTodos)
-	app.Post("/todos", h.CreateTodo)
-	app.Delete("/todos/:id", h.DeleteTodo)
-	app.Patch("/todo/:id/complete", h.ToggleTodoComplete)
+	app.Get("/tasks", h.GetAllTasks)
+	app.Post("/tasks", h.CreateTask)
+	app.Delete("/tasks/:id", h.DeleteTask)
+	app.Patch("/task/:id/complete", h.ToggleTaskComplete)
 
 	log.Fatal(app.Listen(":4000"))
 }

@@ -1,6 +1,6 @@
 // /src/api/taskApi.js
 
-const API_URL = 'http://localhost:4000/todos';
+const API_URL = 'http://localhost:4000/tasks';
 
 // Fetch tasks from the API
 export const fetchTasksFromApi = async () => {
@@ -14,6 +14,29 @@ export const fetchTasksFromApi = async () => {
     return [];  // Return an empty array on error
   }
 };
+
+// edit task api
+export const handleEditTaskApi = async (task) => {
+  try {
+    const response = await fetch(API_URL, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(task),
+    });
+
+    if (response.ok) {
+      const updatedTask = await response.json();
+      return updatedTask;
+    } else {
+      console.error('Failed to edit task');
+    }
+  } catch (error) {
+    console.error('Error edit task:', error);
+    return null;
+  }
+}
 
 // Add a new task to the API
 export const addTaskToApi = async (task) => {
@@ -53,7 +76,7 @@ export const deleteTaskFromApi = async (id) => {
 // Complete a task from the API
 export const handleToggleCompleteApi = async (taskId) => {
   try {
-    const response = await fetch(`http://localhost:4000/todo/${taskId}/complete`, {
+    const response = await fetch(`http://localhost:4000/task/${taskId}/complete`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
