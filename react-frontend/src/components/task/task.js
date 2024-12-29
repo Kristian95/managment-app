@@ -1,6 +1,6 @@
 // src/Tasks.js
 import React, { useState } from 'react';
-import { Table, Button, Modal } from 'react-bootstrap';
+import { Table, Button, Modal, Form } from 'react-bootstrap';
 import useTasks from '../../hooks/useTasks';
 import TaskForm from './taskForm';
 import DeleteModal from '../common/deleteComponent';
@@ -10,6 +10,9 @@ export function Tasks() {
   const { tasks, addTask, deleteTask, completeTask, editTask } = useTasks();
   const [showModal, setShowModal] = useState(false);
   const [editingTask, setEditingTask] =  useState(null);
+
+  const [searchTerm, setSearchTerm] = useState(''); // Search term
+  const [filterCompleted, setFilterCompleted] = useState('All'); //
 
   const handleHideModal = () => setShowModal(false);
 
@@ -62,12 +65,42 @@ export function Tasks() {
     setViewingTask(null);
   };
 
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      filterCompleted === 'All' ||
+      (filterCompleted === 'Completed' && task.completed) ||
+      (filterCompleted === 'Pending' && !task.completed);
+
+    return matchesSearch && matchesFilter;
+  });
+
   return (
     <div>
         {/* Button to open TaskForm modal */}
         <Button variant="primary" onClick={() => handleShowModal()} style={{ marginBottom: '20px' }}>
             Add New Task
         </Button>
+
+        {/* Search and Filter */}
+        <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <Form.Control
+            type="text"
+            placeholder="Search title..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ width: '300px' }}
+          />
+          <Form.Select
+            value={filterCompleted}
+            onChange={(e) => setFilterCompleted(e.target.value)}
+            style={{ width: '200px' }}
+          >
+            <option value="All">All Tasks</option>
+            <option value="Completed">Completed</option>
+            <option value="Pending">Pending</option>
+          </Form.Select>
+        </div>
         {/* Task Form for adding tasks */}
         <TaskForm show={showModal} task={editingTask} addTask={addTask} onHide={handleHideModal} onSubmit={handleFormSubmit} />
 
@@ -83,7 +116,7 @@ export function Tasks() {
             </tr>
         </thead>
         <tbody>
-            {tasks.map((task) => (
+            {filteredTasks.map((task) => (
             <tr key={task.id}>
                 <td>{task.id}</td>
                 <td>{task.title}</td>
