@@ -3,7 +3,7 @@ import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; // Import Router components
 import Tasks from './components/task/task';  // Import the Tasks component
-import TaskStatsChart from './components/task/taskStatsChart';  // Import the Tasks component
+import Dashboard from './components/home/dashboard';
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
         <div style={{ padding: '20px' }}>
           {/* Define Routes */}
           <Routes>
-            <Route path="/" element= {<TaskStatsChart /> } />  {/* Home page */}
+            <Route path="/" element= {<Dashboard /> } />  {/* Home page */}
             <Route path="/tasks" element={<Tasks />} />  {/* Render Tasks component when clicked */}
           </Routes>
         </div>
