@@ -1,10 +1,10 @@
 // src/Tasks.js
 import React, { useState } from 'react';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Modal } from 'react-bootstrap';
 import useTasks from '../../hooks/useTasks';
 import TaskForm from './taskForm';
 import DeleteModal from '../common/deleteComponent';
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit, AiFillEye } from "react-icons/ai";
 
 export function Tasks() {
   const { tasks, addTask, deleteTask, completeTask, editTask } = useTasks();
@@ -46,6 +46,20 @@ export function Tasks() {
   const handleConfirmDelete = () => {
     deleteTask(taskToDelete);  // Call deleteTask from the custom hook
     setShowDeleteModal(false);  // Close the modal after deletion
+  };
+
+  // State for viewing task details
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [viewingTask, setViewingTask] = useState(null);
+
+  const handleShowViewModal = (task) => {
+    setViewingTask(task);
+    setShowViewModal(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setShowViewModal(false);
+    setViewingTask(null);
   };
 
   return (
@@ -91,6 +105,13 @@ export function Tasks() {
                     {task.completed ? 'Undo' : 'Complete'}
                 </Button>
                 <Button
+                    variant="info"
+                    style={{ marginRight: '10px' }}
+                    onClick={() => handleShowViewModal(task)}
+                >
+                    <AiFillEye />View
+                </Button>
+                <Button
                     variant="secondary"
                     style={{ marginRight: '10px' }}
                     onClick={() => handleShowModal(task)}
@@ -115,6 +136,28 @@ export function Tasks() {
             onHide={handleCloseDeleteModal}
             onConfirm={handleConfirmDelete}
         />
+
+        {/* View Details Modal */}
+        <Modal show={showViewModal} onHide={handleCloseViewModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Task Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {viewingTask && (
+              <div>
+                <p><strong>ID:</strong> {viewingTask.id}</p>
+                <p><strong>Title:</strong> {viewingTask.title}</p>
+                <p><strong>Description:</strong> {viewingTask.description}</p>
+                <p><strong>Completed:</strong> {viewingTask.completed ? 'Yes' : 'No'}</p>
+              </div>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseViewModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
     </div>
   );
 }
