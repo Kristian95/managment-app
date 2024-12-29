@@ -11,6 +11,8 @@ export function Tasks() {
   const [showModal, setShowModal] = useState(false);
   const [editingTask, setEditingTask] =  useState(null);
 
+  const [selectedTasks, setSelectedTasks] = useState([]); // State for selected tasks
+
   const [searchTerm, setSearchTerm] = useState(''); // Search term
   const [filterCompleted, setFilterCompleted] = useState('All'); //
 
@@ -65,6 +67,31 @@ export function Tasks() {
     setViewingTask(null);
   };
 
+  // Bulk Action Handlers
+  const handleBulkComplete = () => {
+    selectedTasks.forEach((taskId) => completeTask(taskId));
+    setSelectedTasks([]);
+  };
+
+  const handleBulkDelete = () => {
+    selectedTasks.forEach((taskId) => deleteTask(taskId));
+    setSelectedTasks([]);
+  };
+
+  const handleSelectTask = (taskId) => {
+    setSelectedTasks((prev) =>
+      prev.includes(taskId) ? prev.filter((id) => id !== taskId) : [...prev, taskId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedTasks.length === tasks.length) {
+      setSelectedTasks([]);
+    } else {
+      setSelectedTasks(tasks.map((task) => task.id));
+    }
+  };
+
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter =
@@ -81,6 +108,24 @@ export function Tasks() {
         <Button variant="primary" onClick={() => handleShowModal()} style={{ marginBottom: '20px' }}>
             Add New Task
         </Button>
+
+        {/* Bulk Actions */}
+      <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+        <Button
+          variant="success"
+          onClick={handleBulkComplete}
+          disabled={selectedTasks.length === 0}
+        >
+          Complete Selected
+        </Button>
+        <Button
+          variant="danger"
+          onClick={handleBulkDelete}
+          disabled={selectedTasks.length === 0}
+        >
+          Delete Selected
+        </Button>
+      </div>
 
         {/* Search and Filter */}
         <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -108,16 +153,30 @@ export function Tasks() {
         <Table striped bordered hover>
         <thead>
             <tr>
-            <th>#</th>
-            <th>Task</th>
-            <th>Description</th>
-            <th>Completed</th>
-            <th>Actions</th>
+              <th>
+                <Form.Check
+                  type="checkbox"
+                  checked={selectedTasks.length === tasks.length && tasks.length > 0}
+                  onChange={handleSelectAll}
+                />
+              </th>
+              <th>#</th>
+              <th>Task</th>
+              <th>Description</th>
+              <th>Completed</th>
+              <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             {filteredTasks.map((task) => (
             <tr key={task.id}>
+              <td>
+                <Form.Check
+                  type="checkbox"
+                  checked={selectedTasks.includes(task.id)}
+                  onChange={() => handleSelectTask(task.id)}
+                />
+                </td>
                 <td>{task.id}</td>
                 <td>{task.title}</td>
                 <td>{task.description}</td>
