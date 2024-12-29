@@ -25,6 +25,7 @@ func main() {
 	app.Post("/tasks", h.CreateTask)
 	app.Delete("/tasks/:id", h.DeleteTask)
 	app.Patch("/task/:id/complete", h.ToggleTaskComplete)
+	app.Put("/tasks/:id", h.UpdateTask)
 
 	log.Fatal(app.Listen(":4000"))
 }

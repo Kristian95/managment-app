@@ -4,7 +4,8 @@ import {
   fetchTasksFromApi,
   addTaskToApi,
   deleteTaskFromApi,
-  handleToggleCompleteApi
+  handleToggleCompleteApi,
+  handleEditTaskApi
 } from '../api/taskApi';
 
 const useTasks = () => {
@@ -31,16 +32,16 @@ const useTasks = () => {
     }
   };
 
-  const handleEditTaskApi = async (data) => {
+   const editTask = async (data) => {
     try {
       const updatedTask = await handleEditTaskApi(data);
 
       if (updatedTask) {
-        // setTasks((prevTasks) =>
-        //   prevTasks.map((task) =>
-        //     task.id === id ? { ...task, title: updatedTask.title, description: updatedTask.description } : task
-        //   )
-        // );
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === data.id ? { ...task, title: updatedTask.title, description: updatedTask.description } : task
+          )
+        );
       } else {
         console.error('Failed to edit task. No task returned.');
       }
@@ -105,7 +106,8 @@ const useTasks = () => {
     addTask,
     deleteTask,
     fetchTasks,
-    completeTask
+    completeTask,
+    editTask
   };
 };
 

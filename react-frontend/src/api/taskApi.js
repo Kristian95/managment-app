@@ -18,8 +18,8 @@ export const fetchTasksFromApi = async () => {
 // edit task api
 export const handleEditTaskApi = async (task) => {
   try {
-    const response = await fetch(API_URL, {
-      method: 'PATCH',
+    const response = await fetch(`${API_URL}/${task.id}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },

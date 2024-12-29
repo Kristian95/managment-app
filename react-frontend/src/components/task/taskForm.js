@@ -1,10 +1,20 @@
 // src/TaskForm.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 
-function TaskForm({ show, onHide, addTask }) {
+function TaskForm({ show, onHide, task, onSubmit }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title || '');
+      setDescription(task.description || '');
+    } else {
+      setTitle('');
+      setDescription('');
+    }
+  }, [task]);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -17,7 +27,7 @@ function TaskForm({ show, onHide, addTask }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title.trim() && description.trim()) {
-      addTask({ title, description });
+      onSubmit({ ...task, title, description });
       setTitle('');
       setDescription('');
       onHide();

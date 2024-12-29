@@ -12,6 +12,7 @@ type TaskRepository interface {
 	CreateTask(task *model.Task) (*model.Task, error)
 	DeleteTask(id int) error
 	ToggleTaskComplete(id int) (*model.Task, error)
+	UpdateTask(task *model.Task) (*model.Task, error)
 }
 
 func (r *InMemoryRepository) addDummyData() {
@@ -78,4 +79,17 @@ func (r *InMemoryRepository) ToggleTaskComplete(id int) (*model.Task, error) {
 	r.tasks[id] = task  // Update the task in the map
 
 	return &task, nil
+}
+
+func (r *InMemoryRepository) UpdateTask(task *model.Task) (*model.Task, error) {
+    if existingTask, exists := r.tasks[task.ID]; exists {
+        existingTask.Title = task.Title
+        existingTask.Description = task.Description
+
+		r.tasks[task.ID] = existingTask
+
+        // Return a pointer to the updated task
+        return &existingTask, nil
+    }
+    return nil, fmt.Errorf("task with ID %d not found", task.ID)
 }

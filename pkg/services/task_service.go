@@ -30,3 +30,7 @@ func (s *TaskService) DeleteTask(id int) error {
 func (s *TaskService) ToggleTaskComplete(id int) (*model.Task, error) {
     return s.repo.ToggleTaskComplete(id)
 }
+
+func (s *TaskService) UpdateTask(task *model.Task) (*model.Task, error) {
+	return s.repo.UpdateTask(task)
+}

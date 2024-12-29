@@ -89,3 +89,23 @@ func (h *TaskHandler) ToggleTaskComplete(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(task)
 }
+
+func (h *TaskHandler) UpdateTask(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid task ID"})
+	}
+
+	var task model.Task
+	if err := c.BodyParser(&task); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request payload"})
+	}
+
+	task.ID = id // Ensure the task ID from the URL is set
+	updatedTask, err := h.service.UpdateTask(&task)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(updatedTask)
+}

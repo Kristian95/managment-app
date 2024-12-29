@@ -8,12 +8,27 @@ import DeleteModal from '../common/deleteComponent';
 function Tasks() {
   const { tasks, addTask, deleteTask, completeTask, editTask } = useTasks();
   const [showModal, setShowModal] = useState(false);
+  const [editingTask, setEditingTask] =  useState(null);
 
-  const handleShowModal = () => setShowModal(true);
   const handleHideModal = () => setShowModal(false);
+
+  const handleShowModal = (task = null) => {
+    setEditingTask(task);
+    setShowModal(true);
+  };
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
+
+  const handleFormSubmit = (task) => {
+    if (task.id) {
+      editTask(task);
+    } else {
+      addTask(task);
+    }
+    setShowModal(false);
+    setEditingTask(null);
+  };
 
   // Show the delete confirmation modal
   const handleShowDeleteModal = (taskId) => {
@@ -35,11 +50,11 @@ function Tasks() {
   return (
     <div>
         {/* Button to open TaskForm modal */}
-        <Button variant="primary" onClick={handleShowModal} style={{ marginBottom: '20px' }}>
+        <Button variant="primary" onClick={() => handleShowModal()} style={{ marginBottom: '20px' }}>
             Add New Task
         </Button>
         {/* Task Form for adding tasks */}
-        <TaskForm show={showModal} addTask={addTask} onHide={handleHideModal} />
+        <TaskForm show={showModal} task={editingTask} addTask={addTask} onHide={handleHideModal} onSubmit={handleFormSubmit} />
 
         {/* Bootstrap Table */}
         <Table striped bordered hover>
@@ -77,7 +92,7 @@ function Tasks() {
                 <Button
                     variant="secondary"
                     style={{ marginRight: '10px' }}
-                    onClick={() => editTask(task.id)}
+                    onClick={() => handleShowModal(task)}
                 >
                     Edit
                 </Button>
