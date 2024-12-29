@@ -4,10 +4,9 @@ import { Table, Button } from 'react-bootstrap';
 import useTasks from '../../hooks/useTasks';
 import TaskForm from './taskForm';
 import DeleteModal from '../common/deleteComponent';
-import { AiFillDelete } from "react-icons/ai";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 
-function Tasks() {
+export function Tasks() {
   const { tasks, addTask, deleteTask, completeTask, editTask } = useTasks();
   const [showModal, setShowModal] = useState(false);
   const [editingTask, setEditingTask] =  useState(null);

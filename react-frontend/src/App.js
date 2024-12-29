@@ -21,10 +21,9 @@ function App() {
 
         {/* Main content */}
         <div style={{ padding: '20px' }}>
-          <h1>To-Do List</h1>
           {/* Define Routes */}
           <Routes>
-            <Route path="/" element={<div>Welcome to the Managments!</div>} />  {/* Home page */}
+            <Route path="/" element= {<TaskStatsChart /> } />  {/* Home page */}
             <Route path="/tasks" element={<Tasks />} />  {/* Render Tasks component when clicked */}
           </Routes>
         </div>
