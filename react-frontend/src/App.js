@@ -3,6 +3,7 @@ import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; // Import Router components
 import Tasks from './components/task/task';  // Import the Tasks component
+import TaskStatsChart from './components/task/taskStatsChart';  // Import the Tasks component
 
 function App() {
   return (
