@@ -37,7 +37,7 @@ function TaskForm({ show, onHide, task, onSubmit }) {
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Add New Task</Modal.Title>
+        <Modal.Title>{ task ? 'Edit Task' : 'Add New Task'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
@@ -62,7 +62,7 @@ function TaskForm({ show, onHide, task, onSubmit }) {
           </Form.Group>
 
           <Button variant="primary" type="submit" style={{ marginTop: '10px' }}>
-            Add Task
+          { task ? 'Edit Task' : 'Add task'}
           </Button>
         </Form>
       </Modal.Body>

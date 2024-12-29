@@ -4,6 +4,8 @@ import { Table, Button } from 'react-bootstrap';
 import useTasks from '../../hooks/useTasks';
 import TaskForm from './taskForm';
 import DeleteModal from '../common/deleteComponent';
+import { AiFillDelete } from "react-icons/ai";
+import { AiFillEdit } from "react-icons/ai";
 
 function Tasks() {
   const { tasks, addTask, deleteTask, completeTask, editTask } = useTasks();
@@ -94,14 +96,14 @@ function Tasks() {
                     style={{ marginRight: '10px' }}
                     onClick={() => handleShowModal(task)}
                 >
-                    Edit
+                    <AiFillEdit />Edit
                 </Button>
                 <Button
                     variant="danger"
                     style={{ marginRight: '10px' }}
                     onClick={() => handleShowDeleteModal(task.id)}
                 >
-                    Delete
+                    <AiFillDelete />Delete
                 </Button>
                 </td>
             </tr>
