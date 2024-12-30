@@ -164,7 +164,7 @@ export function Tasks() {
                 />
               </th>
               <th onClick={toggleSortOrder}>
-                # {sortOrder === 'asc' ? <AiOutlineArrowDown /> : <AiOutlineArrowUp />}
+                # {sortOrder === 'asc' ? <AiOutlineArrowUp /> : <AiOutlineArrowDown />}
                 </th>
               <th>Task</th>
               <th>Description</th>
