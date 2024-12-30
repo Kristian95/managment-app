@@ -4,17 +4,16 @@ import { Table, Button, Modal, Form } from 'react-bootstrap';
 import useTasks from '../../hooks/useTasks';
 import TaskForm from './taskForm';
 import DeleteModal from '../common/deleteComponent';
-import { AiFillDelete, AiFillEdit, AiFillEye } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit, AiFillEye, AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 
 export function Tasks() {
   const { tasks, addTask, deleteTask, completeTask, editTask } = useTasks();
   const [showModal, setShowModal] = useState(false);
   const [editingTask, setEditingTask] =  useState(null);
-
   const [selectedTasks, setSelectedTasks] = useState([]); // State for selected tasks
-
   const [searchTerm, setSearchTerm] = useState(''); // Search term
   const [filterCompleted, setFilterCompleted] = useState('All'); //
+  const [sortOrder, setSortOrder] = useState('asc'); // State for sorting order
 
   const handleHideModal = () => setShowModal(false);
 
@@ -92,6 +91,10 @@ export function Tasks() {
     }
   };
 
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
+  };
+
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter =
@@ -100,7 +103,7 @@ export function Tasks() {
       (filterCompleted === 'Pending' && !task.completed);
 
     return matchesSearch && matchesFilter;
-  });
+  }).sort((a, b) => (sortOrder === 'asc' ? a.id - b.id : b.id - a.id));
 
   return (
     <div>
@@ -160,7 +163,9 @@ export function Tasks() {
                   onChange={handleSelectAll}
                 />
               </th>
-              <th>#</th>
+              <th onClick={toggleSortOrder}>
+                # {sortOrder === 'asc' ? <AiOutlineArrowDown /> : <AiOutlineArrowUp />}
+                </th>
               <th>Task</th>
               <th>Description</th>
               <th>Completed</th>
