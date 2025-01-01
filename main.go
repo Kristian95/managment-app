@@ -21,6 +21,13 @@ func main() {
 	svc := service.NewTaskService(repo)
 	h := handler.NewTaskHandler(svc)
 
+	lh := handler.NewLoginHandler()
+
+	// Login
+	app.Post("/login", lh.Login)
+	app.Post("/logout", lh.Logout)
+
+	// Tasks
 	app.Get("/tasks", h.GetAllTasks)
 	app.Post("/tasks", h.CreateTask)
 	app.Delete("/tasks/:id", h.DeleteTask)
